@@ -14,12 +14,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build stage.'
+                git "https://github.com/dickerg-git/raspberry"
+                sh "g++ RGDthread.cpp -lpthread -o ARMTest"
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Test stage.'
+                sh ./ARMTest
             }
         }
 
