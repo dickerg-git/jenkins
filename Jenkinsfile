@@ -5,8 +5,10 @@ pipeline {
     stages {
 
         stage('Info') {
-            echo 'Info stage.'
-            sh 'pwd'
+            steps {
+                echo 'Info stage.'
+                sh 'pwd'
+            }
         }
 
     } // end of stages list
