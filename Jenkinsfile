@@ -1,5 +1,5 @@
 pipeline {
-    
+
     agent any
 
     stages {
@@ -8,6 +8,18 @@ pipeline {
             steps {
                 echo 'Info stage.'
                 sh 'pwd'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Build stage.'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Test stage.'
             }
         }
 
