@@ -1,0 +1,84 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Info') {
+            steps {
+                echo 'Info stage.'
+                sh 'pwd'
+
+            }
+        }
+
+        stage('Input') {
+            steps {
+                echo 'Input stage.'
+
+                script {
+                    def userInput
+                    def didTimeout = false
+
+                    try {
+                        timeout(time: 30, unit: 'SECONDS') { // change to a convenient timeout for you
+
+                           input(id:userInput, message: 'Message',
+                              ok: 'Good!',
+                              parameters:[
+                              [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this'],
+                              //[string: 'myString', defaultValue:'Happy'],
+                              //[$class: 'FileSystemListParameterDefinition'],
+                              // , name:'input file name'
+                              //]
+                              [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this too!']
+
+                              ]
+                           )
+
+                        } //End of Timeout block
+                    } catch(err) { // timeout reached or input false
+                       echo 'Timeout on input...'
+                       //didTimeout = true
+                       def user //= err.getCauses()[0].getUser()
+                       if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+                          didTimeout = true
+                       }
+                    } //End of try-catch
+
+                    if ( didTimeout == true ) {
+                        echo 'Carry on after timeout...' 
+                    }
+
+                } //End of script
+
+            } //End of Steps
+        } //End of Input stage
+
+        stage('Build') {
+            steps {
+                echo 'Build stage.'
+
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Test stage.'
+                //sh "../Threads/ARMTest"
+
+            }
+        }
+
+
+        stage('Results') {
+            steps {
+                echo 'Results stage.'
+
+            }
+        }
+
+
+    } // end of stages list
+
+} // end of the pipeline file
